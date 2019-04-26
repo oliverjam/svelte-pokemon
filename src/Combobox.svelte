@@ -76,7 +76,7 @@
 					class:active={index === i}
 					on:click|stopPropagation={() => selectItem(item)}
 				>
-					{item}
+					<a href="#/pokemon/{item}">{item}</a>
 				</li>
 			{/each}
 		</ul>
@@ -110,6 +110,8 @@
 	}
 
 	ul {
+	  max-height: 16rem;
+	  overflow-y: scroll;
 	  position: absolute;
 	  top: 100%;
 	  left: 0;

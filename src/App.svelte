@@ -1,18 +1,36 @@
 <script>
+	import { onMount } from "svelte";
+	import names from "./data";
 	import Combobox from "./Combobox.svelte";
+	import Pokecard from "./Pokecard.svelte";
 
-	let items = [
-	  "apple",
-	  "orange",
-	  "banana",
-	  "pineapple",
-	  "dragonfruit",
-	  "nectarine",
-	  "grape"
-	];
+	let pokemon;
+
+	async function hashChange() {
+		// the poor man's router!
+		const path = window.location.hash.slice(1);
+
+		if (path.startsWith('/pokemon')) {
+			const name = path.slice(9);
+			console.log(name)
+			pokemon = await fetch(`https://pokeapi.co/api/v2
+/pokemon/${name}/`).then(r => r.json()).catch(console.error);
+
+			window.scrollTo(0,0);
+		} else {
+			window.location.hash = '/';
+		}
+	}
+
+	onMount(hashChange)
 </script>
 
-<Combobox {items} onChange={console.log} />
+<svelte:window on:hashchange={hashChange}/>
+
+<Combobox items={names} onChange={console.log} />
+{#if pokemon}
+  <Pokecard {pokemon} />
+{/if}
 
 <style>
 	:global(*) {
